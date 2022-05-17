@@ -14,3 +14,18 @@ export const sendSms = mobile => {
     url: '/v1_0/sms/codes/' + mobile
   })
 }
+
+export const getUserInfo = () => {
+  console.log(1)
+  return request({
+    method: 'get',
+    url: '/v1_0/user'
+  })
+}
+
+export const getUserChannels = () => {
+  return request({
+    method: 'get',
+    url: '/v1_0/user/channels'
+  })
+}

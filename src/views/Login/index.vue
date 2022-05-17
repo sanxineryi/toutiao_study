@@ -1,6 +1,12 @@
 <template>
   <div class="login_container">
-    <van-nav-bar title="登录" class="page_nav_bar" />
+    <van-nav-bar title="登录" class="page_nav_bar"
+      ><van-icon
+        name="arrow-left"
+        slot="left"
+        size="20"
+        @click="$router.back()"
+    /></van-nav-bar>
     <van-form @submit="onSubmit" ref="loginForm">
       <van-field
         ref="loginForm"
@@ -81,6 +87,7 @@ export default {
         }
       }
     },
+
     async onSubmit (values) {
       this.$toast.loading({
         message: '加载中...',
@@ -88,10 +95,13 @@ export default {
         duration: 0
       })
       try {
-        const res = await loginAPI(values)
-        console.log(values, res)
+        // 获取数据
+        const { data: { data } } = await loginAPI(values)
+        this.$store.commit('userInfo/setUser', data)
         this.$toast.success('登录成功')
+        this.$router.push('/my')
       } catch (error) {
+        console.log(error)
         if (error.response.status === 400) {
           this.$toast.fail('手机号或验证码错误')
         } else {

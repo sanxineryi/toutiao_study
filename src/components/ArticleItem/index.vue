@@ -1,5 +1,16 @@
 <template>
-  <van-cell class="article_item">
+  <!-- query 参数 -->
+  <!-- <van-cell class="article_item" :to="`/article?id=${article.art_id}`"> -->
+  <!-- <van-cell class="article_item" :to="`/article/${article.art_id}`"> -->
+  <van-cell
+    class="article_item"
+    :to="{
+      name: 'article',
+      params: {
+        articleId: article.art_id,
+      },
+    }"
+  >
     <!-- 标题 -->
     <div class="title" slot="title">{{ article.title }}</div>
     <!-- 右侧图片 1张 -->

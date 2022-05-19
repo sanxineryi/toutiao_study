@@ -1,8 +1,21 @@
 import axios from 'axios'
 import store from '@/store'
+import jsonBig from 'json-bigint'
 const request = axios.create({
   // baseURL: 'http://ttapi.research.itcast.cn/' 失效
-  baseURL: 'https://toutiao.itheima.net'
+  baseURL: 'https://toutiao.itheima.net',
+
+  // 学习transformResponse和响应拦截器
+  // 结论1-transformResponse优先级大于拦截器
+  // 结论2-transformResponse处理的数据是原始数据(JSON字符串)
+  // 结论3-响应拦截器得到transformResponse处理完成数据
+  transformResponse: [function (data) {
+    try {
+      return jsonBig.parse(data)
+    } catch (error) {
+      return data
+    }
+  }]
 })
 
 // 添加请求拦截器 设置请求头 token

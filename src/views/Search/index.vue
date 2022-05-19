@@ -21,7 +21,12 @@
       @search="onSearch"
     />
     <!-- 搜索历史 -->
-    <SearchHistory v-else />
+    <SearchHistory
+      v-else
+      :searchHistory="searchHistory"
+      @delHistory="searchHistory.splice($event, 1)"
+      @clearAllHistory="searchHistory.splice(0)"
+    />
   </div>
 </template>
 
@@ -29,6 +34,7 @@
 import SearchHistory from './SearchHistory'
 import SearchSuggestion from './SearchSuggestion'
 import SearchResult from './SearchResult'
+import { getItem, setItem } from '@/utils/storage'
 export default {
   name: 'SearchPage',
   components: {
@@ -39,12 +45,27 @@ export default {
   data () {
     return {
       searchText: '',
-      isResultShow: false // 是否显示搜索结果
+      isResultShow: false, // 是否显示搜索结果
+      // 使用逻辑中断 比三元 更简单 前面为真 就用前面的  为假就用后面的
+      searchHistory: getItem('TOUTIAO-HISTORY') || [] // 存储搜索历史数据
+
+    }
+  },
+  watch: {
+    searchHistory () {
+      setItem('TOUTIAO-HISTORY', this.searchHistory)
     }
   },
   methods: {
     onSearch (val) {
+      // 显示搜索结果
       this.isResultShow = true
+
+      // 存历史数据
+      // const index = this.searchHistory.indexOf(val)
+      const index = this.searchHistory.findIndex(item => item === val)
+      if (index !== -1) this.searchHistory.splice(index, 1)
+      this.searchHistory.unshift(val)
       this.searchText = val // 把这个数据传递给result组件 做为请求的参数
     },
     onCancel () {

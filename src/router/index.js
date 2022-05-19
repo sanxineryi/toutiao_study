@@ -16,7 +16,12 @@ const routes = [
     ]
   },
   { path: '/login', component: () => import('../views/Login') },
-  { path: '/search', component: () => import('../views/Search') }
+  { path: '/search', component: () => import('../views/Search') },
+  // { path: '/article', component: () => import('../views/Article') }
+  // { path: '/article/:', name: 'article', component: () => import('../views/Article') }
+
+  //   将路由动态参数映射到组件的 props 中，更推荐这种做法
+  { path: '/article/:articleId', name: 'article', component: () => import('../views/Article'), props: true }
 ]
 
 const router = new VueRouter({

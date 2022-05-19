@@ -39,19 +39,31 @@ export default {
   },
   methods: {
     async onLoad () {
-      // 异步更新数据
-      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      const { data: { data: { results } } } = await getSearchResultAPI(this.searchText)
-      this.list.push(...results)
-      this.loading = false
-      if (!results) {
-        this.finished = true
-      }
+      // 发请求 拿数据
+      const { data: { data: { results } } } = await getSearchResultAPI({
+        page: this.page,
+        per_page: this.perPage,
+        q: this.searchText
+      })
+      // // 添加数据到数组
+      // this.list.push(...results)
+      // // 关闭加载
+      // this.loading = false
+      // // 判断 如果没有数据了 就设置加载完成
+      // if (!results.length) {
+      //   this.finished = true
+      // } else {
+      //   // 页码++
+      //   this.page++
+      // }
 
-      // 数据全部加载完成
-      if (this.list.length >= 40) {
-        this.finished = true
-      }
+      // 简化写法
+      Object.assign(this, {
+        list: [...this.list, ...results],
+        loading: false,
+        finished: results.length === 0,
+        page: this.page++
+      })
     }
   },
   computed: {},

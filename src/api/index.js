@@ -1,5 +1,5 @@
 import { login, sendSms, getUserInfo, getUserChannels } from './user'
-import { getArticleList, getAllChannels, addUserChannel } from './article'
+import { getArticleList, getAllChannels, addUserChannel, getArticleById } from './article'
 import { getSearchSuggestion, getSearchResult } from './search'
 
 // 用户相关api
@@ -12,6 +12,7 @@ export const getUserChannelsAPI = getUserChannels
 export const getArticleListAPI = getArticleList
 export const getAllChannelsAPI = getAllChannels
 export const addUserChannelAPI = addUserChannel
+export const getArticleByIdAPI = getArticleById
 
 // 搜索相关api
 

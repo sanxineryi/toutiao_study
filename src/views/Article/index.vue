@@ -1,7 +1,9 @@
 <template>
   <div class="article-container markdown-body">
     <!-- 导航栏 -->
-    <van-nav-bar class="page-nav-bar" left-arrow title="头条"></van-nav-bar>
+    <van-nav-bar class="page-nav-bar page_nav_bar" title="头条">
+      <van-icon name="revoke" slot="left" size="25" @click="$router.back()" />
+    </van-nav-bar>
     <!-- /导航栏 -->
 
     <div class="main-wrap">
@@ -28,20 +30,10 @@
             />
             <div slot="title" class="user-name">{{ article.aut_name }}</div>
             <div slot="label" class="publish-date">{{ article.pubdate }}</div>
-            <van-button
-              class="follow-btn"
-              type="info"
-              color="#3296fa"
-              round
-              size="small"
-              icon="plus"
-              >关注</van-button
-            >
-            <!-- <van-button
-            class="follow-btn"
-            round
-            size="small"
-          >已关注</van-button> -->
+            <!-- 关注按钮 -->
+            <!-- <FollowBtn :article="article" /> -->
+            <!-- v-model -->
+            <FollowBtn v-model="article" />
           </van-cell>
           <!-- /用户信息 -->
 
@@ -52,6 +44,13 @@
             ref="articleRef"
           ></div>
           <van-divider>正文结束</van-divider>
+
+          <!-- 评论组件 -->
+          <ArticleComments
+            :article="article"
+            @getTotalComments="totalComments = $event"
+          />
+          <!-- /评论组件 -->
         </div>
         <!-- /加载完成-文章详情 -->
         <template v-else>
@@ -75,26 +74,53 @@
 
     <!-- 底部区域 -->
     <div class="article-bottom">
-      <van-button class="comment-btn" type="default" round size="small"
+      <van-button
+        class="comment-btn"
+        type="default"
+        round
+        size="small"
+        @click="isPostShow = true"
         >写评论</van-button
       >
-      <van-icon name="comment-o" info="123" color="#777" />
-      <van-icon color="#777" name="star-o" />
-      <van-icon color="#777" name="good-job-o" />
+      <van-icon name="comment-o" :info="totalComments" color="#777" />
+
+      <!-- 收藏按钮 -->
+      <CollectIcon
+        v-model="article.is_collected"
+        :article="article"
+      ></CollectIcon>
+      <!-- /收藏按钮 -->
+
+      <!-- 点赞按钮 -->
+      <LikeIcon v-model="article.like_count" :article="article" />
+      <!-- /点赞按钮 -->
+
       <van-icon name="share" color="#777777"></van-icon>
     </div>
     <!-- /底部区域 -->
+
+    <!-- 写评论的弹出层 -->
+    <van-popup v-model="isPostShow" position="bottom">123</van-popup>
   </div>
 </template>
 
 <script>
 import { ImagePreview } from 'vant'
 import { getArticleByIdAPI } from '@/api'
+import FollowBtn from '@/components/FollowBtn'
+import CollectIcon from '@/components/CollectIcon'
+import LikeIcon from '@/components/LikeIcon'
+import ArticleComments from './ArticleComments'
 import '@/../node_modules/github-markdown-css/github-markdown.css'
 import '@/../node_modules/github-markdown-css/github-markdown-light.css'
 export default {
   name: 'ArticleIndex',
-  components: {},
+  components: {
+    FollowBtn,
+    CollectIcon,
+    LikeIcon,
+    ArticleComments
+  },
   props: {
     articleId: {
       type: [Number, String, Object],
@@ -105,7 +131,9 @@ export default {
     return {
       article: {},
       loading: true,
-      errStatus: false
+      errStatus: false,
+      totalComments: 0, // 评论总数
+      isPostShow: false
     }
   },
   computed: {},
@@ -116,16 +144,14 @@ export default {
       this.article = data
     } catch (error) {
       if (error.response && error.response.status === 404) {
-        console.log(1)
         this.errStatus = true
       } else {
         this.errStatus = false
       }
-      console.log(error.response.status)
     }
     this.loading = false
 
-    // 拿到所有图片信息
+    // 拿到所有图片信息 登录dom更新完之后再执行获取真是dom的操作
     this.$nextTick(() => {
       this.previeImg()
     })
@@ -146,6 +172,7 @@ export default {
         }
       })
     }
+
   }
 }
 </script>
@@ -188,8 +215,8 @@ export default {
         color: #b7b7b7;
       }
       .follow-btn {
-        width: 170px;
-        height: 58px;
+        width: 100%;
+        height: 100%;
       }
     }
 

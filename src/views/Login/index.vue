@@ -99,7 +99,7 @@ export default {
         const { data: { data } } = await loginAPI(values)
         this.$store.commit('userInfo/setUser', data)
         this.$toast.success('登录成功')
-        this.$router.push('/my')
+        this.$router.back()
       } catch (error) {
         console.log(error)
         if (error.response.status === 400) {

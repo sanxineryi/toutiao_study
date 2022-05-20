@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 import jsonBig from 'json-bigint'
+import router from '@/router'
 const request = axios.create({
   // baseURL: 'http://ttapi.research.itcast.cn/' 失效
   baseURL: 'https://toutiao.itheima.net',
@@ -29,4 +30,17 @@ request.interceptors.request.use(config => {
 // Do something with request error
   return Promise.reject(error)
 })
+
+// 响应拦截器
+request.interceptors.response.use(function (response) {
+  // 对响应数据做点什么
+  return response
+}, function (error) {
+  // 对响应错误做点什么
+  if (error.response.status === 401) {
+    router.push('/login')
+  }
+  return Promise.reject(error)
+})
+
 export default request

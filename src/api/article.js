@@ -104,3 +104,12 @@ export const deleteCommentLike = commentId => {
     url: `/v1_0/comment/likings/${commentId}`
   })
 }
+
+// 发布评论
+export const releaseComment = data => {
+  return request({
+    method: 'POST',
+    url: '/v1_0/comments',
+    data
+  })
+}

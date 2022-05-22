@@ -5,7 +5,8 @@ import {
   getUserInfo,
   getUserChannels,
   addFollow,
-  deleteFollow
+  deleteFollow,
+  getUserProfile
 } from './user'
 
 // 文章相关
@@ -20,7 +21,8 @@ import {
   UnlikeArticle,
   getArticleComment,
   addCommentLike,
-  deleteCommentLike
+  deleteCommentLike,
+  releaseComment
 } from './article'
 
 // 搜索相关
@@ -36,6 +38,7 @@ export const getUserInfoAPI = getUserInfo
 export const getUserChannelsAPI = getUserChannels
 export const addFollowAPI = addFollow
 export const deleteFollowAPI = deleteFollow
+export const getUserProfileAPI = getUserProfile
 
 // 文章相关api
 export const getArticleListAPI = getArticleList
@@ -49,6 +52,7 @@ export const UnlikeArticleAPI = UnlikeArticle
 export const getArticleCommentAPI = getArticleComment
 export const addCommentLikeAPI = addCommentLike
 export const deleteCommentLikeAPI = deleteCommentLike
+export const releaseCommentAPI = releaseComment
 
 // 搜索相关api
 

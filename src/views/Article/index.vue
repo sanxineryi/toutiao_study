@@ -49,6 +49,8 @@
           <ArticleComments
             :article="article"
             @getTotalComments="totalComments = $event"
+            @addTotalComment="onAddTotalComment"
+            @replyClick="handleReplyClick"
           />
           <!-- /评论组件 -->
         </div>
@@ -100,7 +102,27 @@
     <!-- /底部区域 -->
 
     <!-- 写评论的弹出层 -->
-    <van-popup v-model="isPostShow" position="bottom">123</van-popup>
+    <van-popup v-model="isPostShow" position="bottom">
+      <CommentPost
+        v-if="isPostShow"
+        :articleId="articleId"
+        @closePost="isPostShow = false"
+      />
+    </van-popup>
+
+    <!-- 回复评论弹层 -->
+    <van-popup
+      position="bottom"
+      v-model="isReplyShow"
+      :style="{ height: '100%' }"
+    >
+      <!-- 可以用v-if 销毁组件 -->
+      <CommentReply
+        v-if="isReplyShow"
+        :comment="currentComment"
+        @ClickClose="isReplyShow = false"
+      />
+    </van-popup>
   </div>
 </template>
 
@@ -111,6 +133,8 @@ import FollowBtn from '@/components/FollowBtn'
 import CollectIcon from '@/components/CollectIcon'
 import LikeIcon from '@/components/LikeIcon'
 import ArticleComments from './ArticleComments'
+import CommentReply from './ArticleComments/CommentReply'
+import CommentPost from './ArticleComments/CommentPost'
 import '@/../node_modules/github-markdown-css/github-markdown.css'
 import '@/../node_modules/github-markdown-css/github-markdown-light.css'
 export default {
@@ -119,12 +143,19 @@ export default {
     FollowBtn,
     CollectIcon,
     LikeIcon,
-    ArticleComments
+    ArticleComments,
+    CommentPost,
+    CommentReply
   },
   props: {
     articleId: {
       type: [Number, String, Object],
       required: true
+    }
+  },
+  provide: function () {
+    return {
+      articleId: this.articleId
     }
   },
   data () {
@@ -133,10 +164,14 @@ export default {
       loading: true,
       errStatus: false,
       totalComments: 0, // 评论总数
-      isPostShow: false
+      isPostShow: false,
+      isReplyShow: false, // 回复评论弹层
+      currentComment: {}
     }
   },
-  computed: {},
+  computed: {
+
+  },
   watch: {},
   async created () {
     try {
@@ -156,7 +191,12 @@ export default {
       this.previeImg()
     })
   },
-  mounted () {},
+  mounted () {
+    // 回复数量+1
+    this.$bus.$on('addCommentNum', (val) => {
+      this.currentComment.reply_count = val
+    })
+  },
   methods: {
     // 完成图片放大预览
     previeImg () {
@@ -171,8 +211,15 @@ export default {
           })
         }
       })
+    },
+    onAddTotalComment (total) {
+      this.totalComments = total
+    },
+    handleReplyClick (comment) {
+      console.log(1)
+      this.isReplyShow = true
+      this.currentComment = comment
     }
-
   }
 }
 </script>

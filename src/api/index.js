@@ -6,7 +6,9 @@ import {
   getUserChannels,
   addFollow,
   deleteFollow,
-  getUserProfile
+  getUserProfile,
+  updateUserName,
+  updateUserAvatar
 } from './user'
 
 // 文章相关
@@ -39,6 +41,8 @@ export const getUserChannelsAPI = getUserChannels
 export const addFollowAPI = addFollow
 export const deleteFollowAPI = deleteFollow
 export const getUserProfileAPI = getUserProfile
+export const updateUserNameAPI = updateUserName
+export const updateUserAvatarAPI = updateUserAvatar
 
 // 文章相关api
 export const getArticleListAPI = getArticleList

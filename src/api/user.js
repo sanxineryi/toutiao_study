@@ -56,3 +56,21 @@ export const getUserProfile = () => {
     url: '/v1_0/user/profile'
   })
 }
+
+// 更新昵称
+export const updateUserName = data => {
+  return request({
+    method: 'PATCH',
+    url: '/v1_0/user/profile',
+    data
+  })
+}
+
+// 更新头像
+export const updateUserAvatar = data => {
+  return request({
+    method: 'PATCH',
+    url: 'v1_0/user/photo',
+    data
+  })
+}

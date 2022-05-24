@@ -216,7 +216,7 @@ export default {
       this.totalComments = total
     },
     handleReplyClick (comment) {
-      console.log(1)
+      console.log(comment)
       this.isReplyShow = true
       this.currentComment = comment
     }

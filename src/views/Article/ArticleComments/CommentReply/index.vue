@@ -64,8 +64,7 @@ export default {
   },
   data () {
     return {
-      isReplyPostShow: false,
-      commentList: []
+      isReplyPostShow: false
     }
   },
   computed: {},
